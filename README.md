@@ -10,7 +10,7 @@ La aplicación implementa controles de acceso por roles, seguridad en autenticac
 👨‍💻 Integrantes
 Josué Alejandro Velásquez Tepe - 000151607
 Lindsay Mijhal Álvarez Gaitán -	000147408
-Moisés Castro Tzorin - 147844
+Moisés Castro Tzorin - 000147844
 
 Curso: Análisis y Diseño de Sistemas
 
@@ -247,9 +247,9 @@ Copiar la carpeta dentro de:
 
 C:\xampp\htdocs\
 3. Crear la base de datos
-garage_gt
+taller_gt
 4. Importar
-garage_gt.sql
+taller_gt.sql
 5. Configurar conexión
 
 Editar:
