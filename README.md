@@ -1,220 +1,274 @@
--- ============================================================
--- BASE DE DATOS: garage_gt
--- Sistema de Gestión de Taller Mecánico
--- ============================================================
+🚗 Taller Mecánico GT - Sistema de Gestión de Taller Mecánico
+📖 Descripción del Proyecto
 
-CREATE DATABASE IF NOT EXISTS garage_gt CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE garage_gt;
+Taller Mecánico GT es un sistema web desarrollado como proyecto final del curso Análisis y Diseño de Sistemas, orientado a la administración y gestión integral de un taller mecánico.
 
--- ------------------------------------------------------------
--- TABLA: clientes
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS clientes (
-    cliente_DNI         VARCHAR(10)  NOT NULL,
-    cliente_contrasena  VARCHAR(255) NOT NULL,
-    cliente_nombre      VARCHAR(50)  NOT NULL,
-    cliente_direccion   VARCHAR(50)  DEFAULT NULL,
-    cliente_localidad   VARCHAR(15)  DEFAULT NULL,
-    cliente_telefono    VARCHAR(15)  DEFAULT NULL,
-    cliente_email       VARCHAR(255) DEFAULT NULL,
-    token_recuperacion  VARCHAR(255) DEFAULT NULL,
-    PRIMARY KEY (cliente_DNI)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+El sistema fue desarrollado utilizando PHP Nativo, MySQL, HTML5, CSS3, JavaScript, Bootstrap 5 y arquitectura basada en módulos y roles de usuario. Su propósito es optimizar los procesos administrativos y operativos de un taller mecánico, permitiendo gestionar clientes, vehículos, órdenes de trabajo, empleados, inventario, facturación y reportes desde una única plataforma.
 
--- ------------------------------------------------------------
--- TABLA: empleados
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS empleados (
-    empleado_DNI        VARCHAR(10)  NOT NULL,
-    empleado_contrasena VARCHAR(255) NOT NULL,
-    empleado_nombre     VARCHAR(50)  NOT NULL,
-    empleado_roll       VARCHAR(255) NOT NULL COMMENT 'recepcionista | mecanico | gerente',
-    empleado_email      TEXT         DEFAULT NULL,
-    token_recuperacion  VARCHAR(255) DEFAULT NULL,
-    empleado_direccion  VARCHAR(50)  DEFAULT NULL,
-    empleado_localidad  VARCHAR(15)  DEFAULT NULL,
-    empleado_telefono   VARCHAR(15)  DEFAULT NULL,
-    empleado_habilitado TINYINT(1)   NOT NULL DEFAULT 1,
-    empleado_estado     VARCHAR(50)  DEFAULT 'disponible' COMMENT 'disponible | no_disponible | licencia',
-    licencia_desde      DATE         DEFAULT NULL,
-    licencia_hasta      DATE         DEFAULT NULL,
-    PRIMARY KEY (empleado_DNI)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+La aplicación implementa controles de acceso por roles, seguridad en autenticación, generación de comprobantes, historial técnico de vehículos y seguimiento del estado de las órdenes de servicio.
 
--- ------------------------------------------------------------
--- TABLA: vehiculos
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS vehiculos (
-    vehiculo_patente VARCHAR(10) NOT NULL,
-    cliente_DNI      VARCHAR(10) NOT NULL,
-    vehiculo_marca   VARCHAR(10) DEFAULT NULL,
-    vehiculo_modelo  VARCHAR(10) DEFAULT NULL,
-    vehiculo_anio    VARCHAR(4)  DEFAULT NULL,
-    vehiculo_color   VARCHAR(10) DEFAULT NULL,
-    vehiculo_motor   VARCHAR(10) DEFAULT NULL,
-    PRIMARY KEY (vehiculo_patente),
-    CONSTRAINT fk_vehiculo_cliente FOREIGN KEY (cliente_DNI) REFERENCES clientes(cliente_DNI)
-        ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+👨‍💻 Integrantes
+Josué Alejandro Velásquez Tepe - 000151607
+Lindsay Mijhal Álvarez Gaitán -	000147408
+Moisés Castro Tzorin - 000101010
 
--- ------------------------------------------------------------
--- TABLA: turnos
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS turnos (
-    turno_id         INT(11)     NOT NULL AUTO_INCREMENT,
-    turno_fecha      DATE        NOT NULL,
-    turno_hora       TIME        NOT NULL,
-    cliente_DNI      CHAR(8)     NOT NULL,
-    vehiculo_patente VARCHAR(10) NOT NULL,
-    mecanico_dni     CHAR(8)     NOT NULL,
-    turno_estado     VARCHAR(50) DEFAULT 'pendiente' COMMENT 'pendiente | en_proceso | finalizado | cancelado',
-    turno_comentario TEXT        DEFAULT NULL,
-    PRIMARY KEY (turno_id),
-    CONSTRAINT fk_turno_cliente  FOREIGN KEY (cliente_DNI)      REFERENCES clientes(cliente_DNI),
-    CONSTRAINT fk_turno_vehiculo FOREIGN KEY (vehiculo_patente) REFERENCES vehiculos(vehiculo_patente),
-    CONSTRAINT fk_turno_mecanico FOREIGN KEY (mecanico_dni)     REFERENCES empleados(empleado_DNI)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+Curso: Análisis y Diseño de Sistemas
 
--- ------------------------------------------------------------
--- TABLA: ordenes
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS ordenes (
-    orden_numero     INT(11)      NOT NULL AUTO_INCREMENT,
-    orden_fecha      VARCHAR(255) DEFAULT NULL,
-    vehiculo_patente VARCHAR(10)  NOT NULL,
-    orden_costo      DECIMAL(8,2) DEFAULT 0.00,
-    PRIMARY KEY (orden_numero),
-    CONSTRAINT fk_orden_vehiculo FOREIGN KEY (vehiculo_patente) REFERENCES vehiculos(vehiculo_patente)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+🎯 Objetivo General
 
--- ------------------------------------------------------------
--- TABLA: servicios
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS servicios (
-    servicio_codigo      VARCHAR(5)   NOT NULL,
-    servicio_nombre      VARCHAR(35)  NOT NULL,
-    servicio_descripcion VARCHAR(100) DEFAULT NULL,
-    servicio_costo       DECIMAL(8,2) DEFAULT 0.00,
-    servicio_disponible  TINYINT(1)   NOT NULL DEFAULT 1,
-    PRIMARY KEY (servicio_codigo)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+Desarrollar un sistema de información que permita automatizar y controlar los procesos de un taller mecánico, facilitando la gestión de clientes, vehículos, servicios, empleados y facturación mediante una plataforma web segura y eficiente.
 
--- ------------------------------------------------------------
--- TABLA: productos
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS productos (
-    prod_id              INT(11)       NOT NULL AUTO_INCREMENT,
-    prod_codigo          VARCHAR(20)   DEFAULT NULL,
-    prod_categoria       VARCHAR(100)  DEFAULT NULL,
-    prod_descripcion     VARCHAR(255)  DEFAULT NULL,
-    prod_stock           INT(11)       DEFAULT 0,
-    prod_precio_proveedor DECIMAL(10,2) DEFAULT 0.00,
-    prod_precio_venta    DECIMAL(10,2) DEFAULT 0.00,
-    prod_disponible      TINYINT(1)    NOT NULL DEFAULT 1,
-    PRIMARY KEY (prod_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+🛠 Tecnologías Utilizadas
+PHP Nativo
+MySQL
+HTML5
+CSS3
+JavaScript
+Bootstrap 5
+PDO (PHP Data Objects)
+XAMPP
+Apache Server
+🏗 Arquitectura del Sistema
 
--- ------------------------------------------------------------
--- TABLA: facturas
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS facturas (
-    factura_id       INT(11)       NOT NULL AUTO_INCREMENT,
-    tipo             VARCHAR(10)   DEFAULT NULL COMMENT 'A | B | C',
-    nro_comprobante  INT(11)       DEFAULT NULL,
-    fecha_emision    DATETIME      DEFAULT NULL,
-    orden_numero     INT(11)       DEFAULT NULL,
-    servicio_codigo  VARCHAR(5)    DEFAULT NULL,
-    cliente_dni      VARCHAR(10)   DEFAULT NULL,
-    vehiculo_patente VARCHAR(10)   DEFAULT NULL,
-    total            DECIMAL(10,2) DEFAULT 0.00,
-    pdf_nombre       VARCHAR(255)  DEFAULT NULL,
-    email_destino    VARCHAR(255)  DEFAULT NULL,
-    email_enviado    TINYINT(1)    DEFAULT 0,
-    empleado_emisor  VARCHAR(10)   DEFAULT NULL,
-    PRIMARY KEY (factura_id),
-    CONSTRAINT fk_factura_orden   FOREIGN KEY (orden_numero)    REFERENCES ordenes(orden_numero),
-    CONSTRAINT fk_factura_cliente FOREIGN KEY (cliente_dni)     REFERENCES clientes(cliente_DNI),
-    CONSTRAINT fk_factura_emisor  FOREIGN KEY (empleado_emisor) REFERENCES empleados(empleado_DNI)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+El proyecto fue desarrollado siguiendo una arquitectura modular organizada en:
 
--- ------------------------------------------------------------
--- TABLA: orden_trabajo
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS orden_trabajo (
-    orden_numero     INT(11)       NOT NULL,
-    servicio_codigo  VARCHAR(5)    NOT NULL,
-    complejidad      INT(11)       DEFAULT 1,
-    costo_ajustado   DECIMAL(8,2)  DEFAULT 0.00,
-    orden_kilometros INT(10)       DEFAULT NULL,
-    orden_comentario VARCHAR(255)  DEFAULT NULL,
-    orden_estado     TINYINT(1)    DEFAULT 0 COMMENT '0=pendiente 1=finalizado',
-    mecanico_DNI     VARCHAR(15)   DEFAULT NULL,
-    turno_id         INT(11)       DEFAULT NULL,
-    factura_id       INT(11)       DEFAULT NULL,
-    PRIMARY KEY (orden_numero, servicio_codigo),
-    CONSTRAINT fk_ot_orden    FOREIGN KEY (orden_numero)    REFERENCES ordenes(orden_numero),
-    CONSTRAINT fk_ot_servicio FOREIGN KEY (servicio_codigo) REFERENCES servicios(servicio_codigo),
-    CONSTRAINT fk_ot_mecanico FOREIGN KEY (mecanico_DNI)    REFERENCES empleados(empleado_DNI),
-    CONSTRAINT fk_ot_turno    FOREIGN KEY (turno_id)        REFERENCES turnos(turno_id),
-    CONSTRAINT fk_ot_factura  FOREIGN KEY (factura_id)      REFERENCES facturas(factura_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+garage_gt/
+│
+├── config/
+├── controllers/
+├── views/
+│   ├── recepcionista/
+│   ├── mecanico/
+│   └── gerente/
+├── assets/
+│   ├── css/
+│   └── js/
+├── includes/
+├── uploads/
+└── garage_gt.sql
 
--- ------------------------------------------------------------
--- TABLA: orden_productos
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS orden_productos (
-    id               INT(11)       NOT NULL AUTO_INCREMENT,
-    orden_numero     INT(11)       NOT NULL,
-    prod_id          INT(11)       DEFAULT NULL,
-    prod_codigo      VARCHAR(32)   DEFAULT NULL,
-    prod_descripcion VARCHAR(255)  DEFAULT NULL,
-    cantidad         DECIMAL(10,2) DEFAULT 0.00,
-    precio_unitario  DECIMAL(12,2) DEFAULT 0.00,
-    mecanico_DNI     VARCHAR(20)   DEFAULT NULL,
-    creado_en        DATETIME      DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_op_orden    FOREIGN KEY (orden_numero) REFERENCES ordenes(orden_numero),
-    CONSTRAINT fk_op_producto FOREIGN KEY (prod_id)      REFERENCES productos(prod_id),
-    CONSTRAINT fk_op_mecanico FOREIGN KEY (mecanico_DNI) REFERENCES empleados(empleado_DNI)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+Esta estructura permite una mejor organización del código, mantenimiento y escalabilidad del sistema.
 
--- ------------------------------------------------------------
--- TABLA: factura_numeradores
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS factura_numeradores (
-    tipo    VARCHAR(10) NOT NULL,
-    proximo INT(11)     NOT NULL DEFAULT 1,
-    PRIMARY KEY (tipo)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+🔐 Roles de Usuario
 
--- ------------------------------------------------------------
--- DATOS INICIALES
--- ------------------------------------------------------------
+El sistema implementa un esquema de control de acceso basado en roles (RBAC).
 
--- Numeradores de factura
-INSERT INTO factura_numeradores (tipo, proximo) VALUES
-('A', 1),
-('B', 1),
-('C', 1);
+Recepcionista
 
--- Servicios base
-INSERT INTO servicios (servicio_codigo, servicio_nombre, servicio_descripcion, servicio_costo, servicio_disponible) VALUES
-('SV001', 'Cambio de aceite',      'Cambio de aceite de motor y filtro',           500.00, 1),
-('SV002', 'Alineación y balanceo', 'Alineación de dirección y balanceo de ruedas', 800.00, 1),
-('SV003', 'Frenos',                'Revisión y cambio de pastillas de freno',       950.00, 1),
-('SV004', 'Diagnóstico general',   'Diagnóstico electrónico completo del vehículo', 400.00, 1),
-('SV005', 'Revisión de motor',     'Inspección general del motor',                 1200.00, 1);
+Puede:
 
--- Empleado gerente inicial (contraseña: Admin1234)
-INSERT INTO empleados (
-    empleado_DNI, empleado_contrasena, empleado_nombre, empleado_roll,
-    empleado_email, empleado_habilitado, empleado_estado
-) VALUES (
-    '00000001',
-    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-    'Administrador General',
-    'gerente',
-    'admin@garagegt.com',
-    1,
-    'disponible'
-);
+Registrar clientes.
+Gestionar vehículos.
+Crear órdenes de servicio.
+Programar turnos.
+Generar facturas.
+Consultar historial de vehículos.
+Mecánico
+
+Puede:
+
+Visualizar órdenes asignadas.
+Actualizar estados de trabajo.
+Consultar historial técnico.
+Registrar observaciones de reparación.
+Gerente
+
+Posee acceso total al sistema:
+
+Gestión de empleados.
+Gestión de servicios.
+Administración de inventario.
+Generación de reportes.
+Control de usuarios.
+Supervisión de órdenes de trabajo.
+⚙ Funcionalidades Implementadas
+👥 Gestión de Clientes
+
+Permite:
+
+Registrar clientes.
+Editar información.
+Eliminar registros.
+Buscar clientes existentes.
+
+Información almacenada:
+
+DPI/DNI
+Nombre
+Dirección
+Teléfono
+Correo electrónico
+🚘 Gestión de Vehículos
+
+Cada vehículo queda asociado a un cliente.
+
+Datos registrados:
+
+Placa/Patente
+Marca
+Modelo
+Año
+Color
+Motor
+📅 Gestión de Turnos
+
+El sistema permite:
+
+Programar citas.
+Asignar mecánicos.
+Relacionar vehículos con servicios.
+Controlar estados de atención.
+
+Estados disponibles:
+
+Pendiente
+En Proceso
+Finalizado
+Cancelado
+🔧 Órdenes de Trabajo
+
+Las órdenes permiten:
+
+Registrar trabajos realizados.
+Controlar costos.
+Dar seguimiento a reparaciones.
+Consultar historial de servicios realizados.
+📚 Historial Técnico
+
+Se implementó un historial por vehículo donde se almacenan:
+
+Servicios realizados.
+Reparaciones anteriores.
+Fechas de atención.
+Observaciones técnicas.
+
+Esto permite llevar trazabilidad completa del mantenimiento de cada vehículo.
+
+👨‍🔧 Gestión de Empleados
+
+El gerente puede:
+
+Registrar empleados.
+Asignar roles.
+Habilitar o deshabilitar usuarios.
+Controlar estados laborales.
+
+Roles disponibles:
+
+Recepcionista
+Mecánico
+Gerente
+🧰 Gestión de Servicios
+
+Permite administrar:
+
+Servicios disponibles.
+Descripciones.
+Costos.
+Disponibilidad.
+
+Ejemplos:
+
+Cambio de aceite.
+Diagnóstico.
+Alineación.
+Balanceo.
+Reparaciones generales.
+📦 Gestión de Inventario
+
+Control de productos utilizados en el taller:
+
+Repuestos.
+Lubricantes.
+Herramientas.
+Insumos de mantenimiento.
+
+Incluye control de stock y disponibilidad.
+
+🧾 Facturación
+
+El sistema permite:
+
+Generar comprobantes.
+Calcular costos automáticamente.
+Registrar servicios realizados.
+Emitir documentos para impresión o PDF.
+📊 Reportes
+
+El módulo de reportes proporciona información para la toma de decisiones:
+
+Servicios realizados.
+Vehículos atendidos.
+Órdenes completadas.
+Inventario disponible.
+Actividad de empleados.
+
+Además, permite exportar información para análisis posteriores.
+
+🗄 Base de Datos
+
+La base de datos fue diseñada utilizando el modelo relacional e incluye las siguientes tablas principales:
+
+clientes
+empleados
+vehiculos
+turnos
+ordenes
+servicios
+productos
+
+Las relaciones entre tablas garantizan la integridad de la información mediante llaves primarias y foráneas.
+
+🔒 Seguridad Implementada
+
+Durante el desarrollo se implementaron diversas medidas de seguridad:
+
+Autenticación mediante inicio de sesión.
+Contraseñas cifradas con password_hash().
+Verificación de contraseñas mediante password_verify().
+Prepared Statements con PDO.
+Protección contra SQL Injection.
+Control de acceso por roles.
+Regeneración de sesiones.
+Cierre automático por inactividad.
+Restricción de acceso a módulos no autorizados.
+🚀 Instalación
+Requisitos
+PHP 8.0 o superior
+MySQL
+Apache
+XAMPP
+Pasos
+1. Clonar el repositorio
+git clone https://github.com/usuario/garage_gt.git
+2. Mover el proyecto
+
+Copiar la carpeta dentro de:
+
+C:\xampp\htdocs\
+3. Crear la base de datos
+garage_gt
+4. Importar
+garage_gt.sql
+5. Configurar conexión
+
+Editar:
+
+config/db.php
+6. Ejecutar
+http://localhost/garage_gt
+📈 Resultados Obtenidos
+
+Con la implementación de Garage GT se logró:
+
+Digitalizar los procesos administrativos del taller.
+Reducir el tiempo de gestión de órdenes.
+Centralizar la información de clientes y vehículos.
+Mejorar el control de inventario.
+Facilitar la generación de reportes.
+Incrementar la seguridad de la información mediante controles de acceso.
+🎓 Conclusión
+
+El proyecto Taller Mecánico GT permitió aplicar los conocimientos adquiridos durante el curso de Análisis y Diseño de Sistemas, abarcando las etapas de análisis, diseño, modelado de base de datos, implementación y pruebas de un sistema real.
+
+La solución desarrollada proporciona una herramienta funcional para la administración de talleres mecánicos, mejorando la organización, eficiencia y control de los procesos operativos y administrativos mediante tecnologías web modernas.
