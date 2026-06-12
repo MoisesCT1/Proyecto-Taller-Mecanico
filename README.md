@@ -10,7 +10,7 @@ La aplicación implementa controles de acceso por roles, seguridad en autenticac
 👨‍💻 Integrantes
 Josué Alejandro Velásquez Tepe - 000151607
 Lindsay Mijhal Álvarez Gaitán -	000147408
-Moisés Castro Tzorin - 000101010
+Moisés Castro Tzorin - 147844
 
 Curso: Análisis y Diseño de Sistemas
 
@@ -32,7 +32,7 @@ Apache Server
 
 El proyecto fue desarrollado siguiendo una arquitectura modular organizada en:
 
-garage_gt/
+taller_gt/
 │
 ├── config/
 ├── controllers/
@@ -259,7 +259,7 @@ config/db.php
 http://localhost/garage_gt
 📈 Resultados Obtenidos
 
-Con la implementación de Garage GT se logró:
+Con la implementación de taller GT se logró:
 
 Digitalizar los procesos administrativos del taller.
 Reducir el tiempo de gestión de órdenes.
