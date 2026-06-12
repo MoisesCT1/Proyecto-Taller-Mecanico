@@ -240,6 +240,7 @@ Apache
 XAMPP
 Pasos
 1. Clonar el repositorio
+git clone https://github.com/MoisesCT1/Proyecto-Taller-Mecanico.git
 2. Mover el proyecto
 
 Copiar la carpeta dentro de:
