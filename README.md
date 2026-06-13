@@ -272,4 +272,4 @@ Incrementar la seguridad de la información mediante controles de acceso.
 El proyecto Taller Mecánico GT permitió aplicar los conocimientos adquiridos durante el curso de Análisis y Diseño de Sistemas, abarcando las etapas de análisis, diseño, modelado de base de datos, implementación y pruebas de un sistema real.
 
 La solución desarrollada proporciona una herramienta funcional para la administración de talleres mecánicos, mejorando la organización, eficiencia y control de los procesos operativos y administrativos mediante tecnologías web modernas.
-fecha de entrega 12/06/26
+fecha de entrega 12/06/2026
